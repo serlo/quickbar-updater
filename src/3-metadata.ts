@@ -3,7 +3,7 @@ import fs from 'fs'
 
 const quicklinks = require('../quicklinks.json')
 
-const metaData = [] // TODO: load from cache
+let metaData = []
 
 const fastMode = process.env.FAST // using staging
 
@@ -16,6 +16,13 @@ const limit = fastMode ? 100000 : 1800
 run()
 
 async function run() {
+  // Step 0 - fetch metadata cache
+  console.log('load from previous build')
+  const res = await fetch(
+    'https://serlo.github.io/quickbar-updater/meta_data.json'
+  )
+  let metaData = await res.json()
+
   // Step 1 add new stuff
   const ids = new Set()
   metaData.forEach((entry) => ids.add(entry.id))
@@ -74,7 +81,7 @@ async function run() {
       entry.meta = data
       entry.time = Date.now()
       if (!fastMode) {
-        await sleep(200)
+        await sleep(50)
       }
     } catch (e) {
       console.log(entry.id, e)
