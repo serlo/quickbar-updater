@@ -11,7 +11,7 @@ const endpoint = fastMode
   ? 'https://api.serlo-staging.dev/graphql'
   : 'https://api.serlo.org/graphql'
 
-const limit = fastMode ? 100000 : 100
+const limit = fastMode ? 100000 : 1800
 
 run()
 
