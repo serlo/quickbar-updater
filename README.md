@@ -35,3 +35,11 @@ input: quicklinks.json, (cache of metadata)
 output: \_output/meta_data.json
 
 takes 10 - 15 minutes to not overflow API
+
+### yarn 4-process
+
+input: meta_data.json
+
+output: quickbar.json
+
+the final output, available at https://serlo.github.io/quickbar-updater/quickbar.json
