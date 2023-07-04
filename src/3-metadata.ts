@@ -11,7 +11,7 @@ const endpoint = fastMode
   ? 'https://api.serlo-staging.dev/graphql'
   : 'https://api.serlo.org/graphql'
 
-const limit = fastMode ? 100000 : 1800
+const limit = fastMode ? 100000 : 100
 
 run()
 
@@ -94,13 +94,13 @@ async function run() {
   }
 
   save()
-}
 
-function save() {
-  if (!fs.existsSync('_output')) {
-    fs.mkdirSync('_output')
+  function save() {
+    if (!fs.existsSync('_output')) {
+      fs.mkdirSync('_output')
+    }
+    fs.writeFileSync('_output/meta_data.json', JSON.stringify(metaData))
   }
-  fs.writeFileSync('_output/meta_data.json', JSON.stringify(metaData))
 }
 
 function buildQuery(id) {
