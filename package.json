@@ -2,11 +2,17 @@
   "name": "quickbar-updater",
   "packageManager": "yarn@3.6.0",
   "dependencies": {
+    "dotenv": "^16.3.1",
+    "graphql": "^16.7.1",
+    "graphql-request": "^6.1.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.5"
   },
   "scripts": {
-    "start": "ts-node ./src/index.ts"
+    "1-fetch": "ts-node ./src/1-fetch.ts",
+    "2-extract": "ts-node ./src/2-extract.ts",
+    "3-metadata": "ts-node ./src/3-metadata.ts",
+    "4-process": "ts-node ./src/4-process.ts"
   },
   "devDependencies": {
     "@types/node": "^18.0.0"
