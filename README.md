@@ -34,4 +34,4 @@ input: quicklinks.json, (cache of metadata)
 
 output: \_output/meta_data.json
 
-takes 10 - 15 minutes to now overflow API
+takes 10 - 15 minutes to not overflow API
