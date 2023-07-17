@@ -2,6 +2,8 @@ const data = require('../_output/meta_data.json')
 
 const quickbar = []
 
+const summary: { [key: string]: { count: number } } = {}
+
 for (const entry of data) {
   if (!entry.meta) {
     continue
@@ -82,7 +84,27 @@ for (const entry of data) {
     }
     quickbar.push(output)
   }
+
+  const summaryType =
+    type == 'TaxonomyTerm' && !title.toLowerCase().includes('aufgabe')
+      ? 'ExerciseFolder'
+      : entry.meta.uuid.__typename
+  const summaryEntry = (summary[summaryType] = summary[summaryType] ?? {
+    count: 0,
+  })
+  summaryEntry.count += entry.count
 }
+
+require('fs').writeFileSync(
+  '_output/stats.txt',
+  `
+Aufrufzahlen in den letzten 3 Wochen (Stand ${new Date().toLocaleString(
+    'de-DE'
+  )}):
+
+${JSON.stringify(summary, null, 2)}
+`
+)
 
 require('fs').writeFileSync('_output/quickbar.json', JSON.stringify(quickbar))
 
