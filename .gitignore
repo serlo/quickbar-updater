@@ -132,3 +132,4 @@ dist
 # stats data
 *.csv
 _output
+quicklinks.json
