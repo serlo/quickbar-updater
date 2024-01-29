@@ -1,5 +1,7 @@
 # quickbar-updater
 
+Update: 2024-01-29
+
 Script to process data for quickbar
 
 ![grafik](https://github.com/serlo/quickbar-updater/assets/13507950/573054eb-9880-4a73-ac17-1f26073239b2)
