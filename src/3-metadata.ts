@@ -5,7 +5,7 @@ const quicklinks = require('../quicklinks.json')
 
 let metaData = []
 
-const fastMode = process.env.FAST // using staging
+const fastMode = true //process.env.FAST // using staging
 
 const endpoint = fastMode
   ? 'https://api.serlo-staging.dev/graphql'
@@ -107,34 +107,94 @@ function buildQuery(id) {
   return `
 {
   uuid (id: ${id}) {
-      __typename
-      alias
+    __typename
+    alias
 
-      ... on Page {
-        trashed
+    ... on Page {
+      trashed
+      currentRevision {
+        title
+      }
+    }
+
+    ... on CoursePage {
+      trashed
+      currentRevision {
+        title
+      }
+      course {
         currentRevision {
           title
         }
-        navigation {
-          path {nodes {label}}
+        taxonomyTerms {
+          nodes {
+            ...pathToRoot
+          }
         }
       }
-
-      ... on CoursePage {
-        trashed
-        currentRevision {
-          title
+    }
+    
+    ... on Article {
+      trashed
+      currentRevision {
+        title
+      }
+      taxonomyTerms {
+        nodes {
+          ...pathToRoot
         }
-        course {
-          currentRevision {
+      }
+    }
+
+    ... on TaxonomyTerm {
+      name
+      trashed
+
+      ...pathToRoot
+    }
+  }
+}
+
+fragment pathToRoot on TaxonomyTerm {
+  title
+  alias
+  id
+  parent {
+    title
+    alias
+    id
+    parent {
+      title
+      alias
+      id
+      parent {
+        title
+        alias
+        id
+        parent {
+          title
+          alias
+          id
+          parent {
             title
-          }
-          taxonomyTerms {
-            nodes {
-              navigation {
-                path {
-                  nodes {
-                    label
+            alias
+            id
+            parent {
+              title
+              alias
+              id
+              parent {
+                title
+                alias
+                id
+                parent {
+                  title
+                  alias
+                  id
+                  parent {
+                    title
+                    alias
+                    id
                   }
                 }
               }
@@ -142,39 +202,10 @@ function buildQuery(id) {
           }
         }
       }
-      
-      ... on Article {
-        trashed
-        currentRevision {
-          title
-        }
-        taxonomyTerms {
-          nodes {
-            navigation {
-              path {
-                nodes {
-                  label
-                }
-              }
-            }
-          }
-        }
-      }
-
-      ... on TaxonomyTerm {
-        name
-        trashed
-
-        navigation {
-          path {
-            nodes {
-              label
-            }
-          }
-        }
-      }
+    }
   }
-}`
+}
+`
 }
 
 function sleep(milliseconds) {

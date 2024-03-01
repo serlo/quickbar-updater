@@ -33,9 +33,7 @@ for (const entry of data) {
       title = entry.meta.uuid.currentRevision.title.trim()
   }
   if (type == 'Page') {
-    path = buildPath(
-      buildFromTaxTerms([{ navigation: entry.meta.uuid.navigation }])
-    )
+    path = []
     if (entry.meta.uuid.currentRevision)
       title = entry.meta.uuid.currentRevision.title.trim()
   }
