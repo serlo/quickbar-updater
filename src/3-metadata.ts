@@ -1,20 +1,31 @@
-import { request } from 'graphql-request';
-import fs from 'fs';
+import { request } from "graphql-request";
+import fs from "fs";
 
-const quicklinks = require('../quicklinks.json');
-const metaData = require('../mock_cache/meta_data.json');
+const quicklinks = require("../quicklinks.json");
+let metaData = [];
 
-const isFast = true
+const isFastMode = process.env.FAST;
 // Determines the API endpoint based on the environment mode
-const endpoint = isFast
-  ? 'https://api.serlo-staging.dev/graphql'
-  : 'https://api.serlo.org/graphql';
+const endpoint = isFastMode
+  ? "https://api.serlo-staging.dev/graphql"
+  : "https://api.serlo.org/graphql";
 
 // Set the limit based on the fast mode flag
-const limit = isFast ? 1800 : 100000;
+const limit = isFastMode ? 1800 : 100000;
 
 async function run() {
-  console.log('Starting update process...');
+  console.log("Starting update process...");
+
+  // Fetch metadata cache
+  // TODO? : Use upload artifacts instead?
+  try {
+    const res = await fetch(
+      "https://serlo.github.io/quickbar-updater/meta_data.json"
+    );
+    metaData = await res.json();
+  } catch (e) {
+    console.log("Failed to load previous metadata");
+  }
 
   // Step 1: Add new items from quicklinks to metaData if they don't already exist
   const existingIds = new Set(metaData.map((entry) => entry.id));
@@ -27,12 +38,16 @@ async function run() {
   // Step 2: Determine which entries need fetching based on time and existence in quicklinks
   const quicklinkIds = new Set(quicklinks.map((entry) => entry.id));
   const timeCap = Date.now() - 24 * 60 * 60 * 1000; // 24 hours ago
-  
-  const toFetch = metaData.filter(entry => {
+
+  const toFetch = metaData.filter((entry) => {
     const isRecentEnough = entry.time && entry.time > timeCap;
     const isInQuicklinks = quicklinkIds.has(entry.id);
-    const hasValidType = !entry.meta || ['Page', 'CoursePage', 'TaxonomyTerm', 'Article'].includes(entry.meta?.uuid?.__typename);
-    
+    const hasValidType =
+      !entry.meta ||
+      ["Page", "CoursePage", "TaxonomyTerm", "Article"].includes(
+        entry.meta?.uuid?.__typename
+      );
+
     return isInQuicklinks && !isRecentEnough && hasValidType;
   });
 
@@ -49,7 +64,7 @@ async function run() {
       const data = await request(endpoint, buildQuery(entry.id));
       entry.meta = data;
       entry.time = Date.now();
-      if (!process.env.FAST_MODE) {
+      if (!isFastMode) {
         await sleep(50); // Throttle requests unless in fast mode
       }
     } catch (error) {
@@ -66,15 +81,18 @@ async function run() {
 }
 
 function saveMetaData(data) {
-  const outputDir = '_output';
+  const outputDir = "_output";
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir);
   }
-  fs.writeFileSync(`${outputDir}/meta_data.json`, JSON.stringify(data, null, 2));
+  fs.writeFileSync(
+    `${outputDir}/meta_data.json`,
+    JSON.stringify(data, null, 2)
+  );
 }
 
 function buildQuery(id) {
-    return `
+  return `
   {
     uuid (id: ${id}) {
       __typename
@@ -175,11 +193,11 @@ function buildQuery(id) {
       }
     }
   }
-  `
-  }
+  `;
+}
 
 function sleep(milliseconds) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 
-run().catch((error) => console.error('Failed to update metadata:', error));
+run().catch((error) => console.error("Failed to update metadata:", error));
