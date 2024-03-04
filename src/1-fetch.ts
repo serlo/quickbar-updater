@@ -19,7 +19,7 @@ async function run() {
   const resPW = await fetch(saEndpoint + timeRange, {
     headers: {
       'Api-Key': process.env.SA_KEY,
-    },
+    } as HeadersInit,
   })
 
   // type mismatch between fetch and stream api

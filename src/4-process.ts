@@ -1,145 +1,106 @@
-const data = require('../_output/meta_data.json')
+const fs = require('fs');
 
-const quickbar = []
-
-const summary: { [key: string]: { count: number } } = {}
-
-for (const entry of data) {
-  if (!entry.meta) {
-    continue
-  }
-
-  if (entry.meta.uuid === null) {
-    console.log(entry)
-    continue
-  }
-  if (entry.meta.uuid.trashed == true) {
-    // console.log('trashed', entry.id)
-    continue
-  }
-  const type = entry.meta.uuid.__typename
-  let path = undefined
-  let title = ''
-  if (type == 'Article') {
-    path = buildPath(buildFromTaxTerms(entry.meta.uuid.taxonomyTerms.nodes))
-    if (entry.meta.uuid.currentRevision)
-      title = entry.meta.uuid.currentRevision.title.trim()
-  }
-  if (type == 'CoursePage') {
-    path = buildPath(
-      buildFromTaxTerms(entry.meta.uuid.course.taxonomyTerms.nodes)
-    )
-    if (entry.meta.uuid.currentRevision)
-      title = entry.meta.uuid.currentRevision.title.trim()
-  }
-  if (type == 'Page') {
-    path = []
-    if (entry.meta.uuid.currentRevision)
-      title = entry.meta.uuid.currentRevision.title.trim()
-  }
-  if (type == 'TaxonomyTerm') {
-    path = buildPath(
-      buildFromTaxTerms([{ navigation: entry.meta.uuid.navigation }])
-    )
-    title = entry.meta.uuid.name.trim()
-  }
-  if (title) {
-    if (!path) {
-      path = []
-      console.log('no path', title)
-      continue
-    }
-
-    if (type == 'CoursePage' && entry.meta.uuid.course.currentRevision) {
-      path.push(entry.meta.uuid.course.currentRevision.title.trim())
-    }
-
-    path = path.filter((x) => x != 'Themen' && x != 'Alle Themen')
-    const outpath = []
-    for (let i = path.length - 1; i >= 0; i--) {
-      if (path[i] == title) continue
-      if (title.includes(path[i])) continue
-      if (outpath.some((p) => p.includes(path[i]))) continue
-      if (i > 1 && path[i - 1] == path[i]) continue
-
-      const cur = title + outpath.join('')
-      if (cur.length >= 35 && (outpath.length > 0 || i < path.length - 3)) break
-      if (
-        (path[i] + cur).length <= 60 ||
-        (outpath.length == 0 && (path[i] + cur).length <= 66)
-      ) {
-        outpath.unshift(path[i])
-      }
-    }
-
-    const output = {
-      id: entry.id,
-      title,
-      path: outpath,
-      isTax: type == 'TaxonomyTerm' && !title.toLowerCase().includes('aufgabe'),
-      count: entry.count,
-      root: path[0],
-    }
-    quickbar.push(output)
-  }
-
-  const summaryType =
-    type == 'TaxonomyTerm' && !title.toLowerCase().includes('aufgabe')
-      ? 'ExerciseFolder'
-      : entry.meta.uuid.__typename
-  const summaryEntry = (summary[summaryType] = summary[summaryType] ?? {
-    count: 0,
-  })
-  summaryEntry.count += entry.count
+export interface QuickbarItem {
+  id: string;
+  title: string;
+  path: string[]; 
+  isTax: boolean;
+  count: number;
+  root: string;
 }
 
-require('fs').writeFileSync(
-  '_output/stats.txt',
-  `
-Aufrufzahlen in den letzten 3 Wochen (Stand ${new Date().toLocaleString(
-    'de-DE'
-  )}):
-
-${JSON.stringify(summary, null, 2)}
-`
-)
-
-require('fs').writeFileSync('_output/quickbar.json', JSON.stringify(quickbar))
-
-function print(val) {
-  return `${val.path.join(' > ')}${val.path.length > 0 ? ' > ' : ''}${
-    val.title
-  }${val.isTax ? ' >' : ''}`
-}
+const data = require('../_output/meta_data.json');
+const quickbar: QuickbarItem[] = [];
+const summary = {};
 
 function buildPath(arr) {
-  if (!arr) return undefined
-  return arr.map(({ label }) => label.trim())
+  return arr ? arr.map(({ label }) => label?.trim()).filter(Boolean) : [];
 }
 
-function buildFromTaxTerms(taxonomyPaths) {
-  if (taxonomyPaths === undefined) return undefined
-  let breadcrumbs
-  let backup
+function buildFromTaxTerms(taxonomyTerms) {
+  if (!taxonomyTerms) return [];
+  let path = [];
 
-  for (const child of taxonomyPaths) {
-    if (!child.navigation) continue
-    const path = child.navigation.path.nodes
-    if (!breadcrumbs || breadcrumbs.length > path.length) {
-      // compat: some paths are short-circuited, ignore them
-      if (
-        path.some((x) => x.label === 'Mathematik') &&
-        !path.some((x) => x.label === 'Alle Themen')
-      ) {
-        if (!backup || backup.length > path.length) {
-          backup = path
-        }
-        continue
+  taxonomyTerms.forEach(term => {
+    if (term.navigation) {
+      const { nodes } = term.navigation.path;
+      if (!path.length || path.length > nodes.length) {
+        path = nodes;
       }
+    }
+  });
 
-      breadcrumbs = path
+  return buildPath(path);
+}
+
+function addPathForCoursePage(entry, path) {
+  if (entry.meta.uuid.course.currentRevision) {
+    const courseTitle = entry.meta.uuid.course.currentRevision.title.trim();
+    if (!path.includes(courseTitle)) {
+      path.push(courseTitle);
     }
   }
-
-  return breadcrumbs || backup
 }
+
+function filterAndReversePath(path, title) {
+  return path
+    .filter(p => p !== 'Themen' && p !== 'Alle Themen' && p !== title && !title.includes(p))
+    .reverse()
+    .reduce((acc, cur) => {
+      if (!acc.some(p => p.includes(cur)) && !cur.includes(title) && cur.length + acc.join('').length <= 60) {
+        acc.unshift(cur);
+      }
+      return acc;
+    }, []);
+}
+
+data.forEach(entry => {
+  if (!entry.meta || !entry.meta.uuid || entry.meta.uuid.trashed) {
+    return;
+  }
+
+  const { uuid } = entry.meta;
+  let path = [];
+  let title = uuid.currentRevision ? uuid.currentRevision.title.trim() : '';
+
+  switch (uuid.__typename) {
+    case 'Article':
+    case 'CoursePage':
+      path = buildFromTaxTerms(uuid.taxonomyTerms?.nodes || []);
+      break;
+    case 'Page':
+      break; // Path remains an empty array
+    case 'TaxonomyTerm':
+      path = buildPath([{ label: uuid.name }]);
+      title = uuid.name.trim();
+      break;
+  }
+
+  if (uuid.__typename === 'CoursePage') {
+    addPathForCoursePage(entry, path);
+  }
+
+  if (title) {
+    path = filterAndReversePath(path, title);
+    const isTax = uuid.__typename === 'TaxonomyTerm' && !title.toLowerCase().includes('aufgabe');
+    quickbar.push({
+      id: entry.id,
+      title,
+      path,
+      isTax,
+      count: entry.count,
+      root: path[0] || '',
+    });
+
+    const summaryType = isTax ? 'ExerciseFolder' : uuid.__typename;
+    summary[summaryType] = (summary[summaryType] || { count: 0 });
+    summary[summaryType].count += entry.count;
+  }
+});
+
+fs.writeFileSync('_output/stats_new.txt', `
+Aufrufzahlen in den letzten 3 Wochen (Stand ${new Date().toLocaleString('de-DE')}):
+${JSON.stringify(summary, null, 2)}
+`);
+
+fs.writeFileSync('newoutput/quickbar_v2.json', JSON.stringify(quickbar));
