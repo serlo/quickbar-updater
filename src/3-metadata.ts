@@ -56,11 +56,12 @@ async function run() {
   // Step 3: Sort entries by time for prioritization
   toFetch.sort((a, b) => (a.time || -2) - (b.time || -2));
 
+  const numberOfEntries = Math.min(toFetch.length, limit);
   // Step 4: Fetch and update metadata for limited number of entries
-  for (let i = 0; i < Math.min(toFetch.length, limit); i++) {
+  for (let i = 0; i < numberOfEntries; i++) {
     const entry = toFetch[i];
     try {
-      console.log(`Fetching ${entry.id} (${(i / toFetch.length) * 100}%)`);
+      console.log(`Fetching ${entry.id} (${(i / numberOfEntries) * 100}%)`);
       const data = await request(endpoint, buildQuery(entry.id));
       entry.meta = data;
       entry.time = Date.now();
