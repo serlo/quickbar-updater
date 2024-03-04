@@ -38,18 +38,16 @@ jobs:
         uses: actions/configure-pages@v3
       - name: Use backup (temporary)
         run: |
-          mkdir _output
-          cp backup/quickbar.json _output/quickbar.json
-      # - name: Install
-      #   run: yarn
-      # - name: FETCH
-      #   run: yarn 1-fetch
-      # - name: EXTRACT
-      #   run: yarn 2-extract
-      # - name: METADATA
-      #   run: yarn 3-metadata
-      # - name: PROCESS
-      #   run: yarn 4-process
+          - name: Install
+            run: yarn
+          - name: FETCH
+            run: yarn 1-fetch
+          - name: EXTRACT
+            run: yarn 2-extract
+          - name: METADATA
+            run: yarn 3-metadata
+          - name: PROCESS
+            run: yarn 4-process
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
