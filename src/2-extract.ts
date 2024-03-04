@@ -2,8 +2,8 @@ import fs from 'fs';
 import readline from 'readline';
 const resolver = require('../resolver.json');
 
-const INPUT_FILE_NAME = './_output/v2_current_de_serlo.org_visits.csv'
-const OUTPUT_FILE_NAME = './_output/quicklinks.json'
+const INPUT_FILE_NAME = './v2_current_de_serlo.org_visits.csv'
+const OUTPUT_FILE_NAME = './quicklinks.json'
 
 const visitCounts = {};
 
@@ -16,7 +16,6 @@ const visitsFileReader = readline.createInterface({
 const extractIdFromPath = (path) => {
   // Remove protocol and domain
   const cleanedPath = path.replace(/^https?:\/\/de.serlo.org/, '');
-
   // Original regular expression for matching ID patterns in the path
   const reg = /^(?:(?:\/[^\/]+)?\/([\d]+)\/[^\/]+|\/([\d]+)|\/taxonomy\/term\/get\/([\d]+))$/;
   const match = reg.exec(cleanedPath);

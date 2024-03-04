@@ -1,8 +1,8 @@
 import { request } from 'graphql-request';
 import fs from 'fs';
 
-const quicklinks = require('../_output/quicklinks.json');
-const metaData = require('../meta_data.json');
+const quicklinks = require('../quicklinks.json');
+const metaData = require('../mock_cache/meta_data.json');
 
 const isFast = true
 // Determines the API endpoint based on the environment mode
