@@ -1,106 +1,83 @@
-const fs = require('fs');
+const fs = require("fs");
 
-export interface QuickbarItem {
-  id: string;
-  title: string;
-  path: string[]; 
-  isTax: boolean;
-  count: number;
-  root: string;
-}
+const inputData = require("../_output/meta_data.json");
 
-const data = require('../_output/meta_data.json');
-const quickbar: QuickbarItem[] = [];
 const summary = {};
 
-function buildPath(arr) {
-  return arr ? arr.map(({ label }) => label?.trim()).filter(Boolean) : [];
-}
-
-function buildFromTaxTerms(taxonomyTerms) {
-  if (!taxonomyTerms) return [];
-  let path = [];
-
-  taxonomyTerms.forEach(term => {
-    if (term.navigation) {
-      const { nodes } = term.navigation.path;
-      if (!path.length || path.length > nodes.length) {
-        path = nodes;
-      }
-    }
-  });
-
-  return buildPath(path);
-}
-
-function addPathForCoursePage(entry, path) {
-  if (entry.meta.uuid.course.currentRevision) {
-    const courseTitle = entry.meta.uuid.course.currentRevision.title.trim();
-    if (!path.includes(courseTitle)) {
-      path.push(courseTitle);
-    }
+function constructPath(term) {
+  const path = [];
+  while (term && term.title !== "Root") {
+    path.unshift(term.title.trim());
+    term = term.parent;
   }
+  return path.slice(0, -1); // Exclude "Root"
 }
 
-function filterAndReversePath(path, title) {
-  return path
-    .filter(p => p !== 'Themen' && p !== 'Alle Themen' && p !== title && !title.includes(p))
-    .reverse()
-    .reduce((acc, cur) => {
-      if (!acc.some(p => p.includes(cur)) && !cur.includes(title) && cur.length + acc.join('').length <= 60) {
-        acc.unshift(cur);
-      }
-      return acc;
-    }, []);
-}
-
-data.forEach(entry => {
+const quickbarItems = inputData.reduce((accumulator, entry) => {
   if (!entry.meta || !entry.meta.uuid || entry.meta.uuid.trashed) {
-    return;
+    return accumulator; // Skip entries without metadata, uuid, or if trashed
   }
 
-  const { uuid } = entry.meta;
+  const uuid = entry.meta.uuid;
   let path = [];
-  let title = uuid.currentRevision ? uuid.currentRevision.title.trim() : '';
+  let title = uuid.currentRevision
+    ? uuid.currentRevision.title.trim()
+    : uuid.name
+    ? uuid.name.trim()
+    : "";
 
-  switch (uuid.__typename) {
-    case 'Article':
-    case 'CoursePage':
-      path = buildFromTaxTerms(uuid.taxonomyTerms?.nodes || []);
-      break;
-    case 'Page':
-      break; // Path remains an empty array
-    case 'TaxonomyTerm':
-      path = buildPath([{ label: uuid.name }]);
-      title = uuid.name.trim();
-      break;
+  // Path construction based on type
+  if (["Article", "CoursePage"].includes(uuid.__typename)) {
+    path = uuid.taxonomyTerms ? constructPath(uuid.taxonomyTerms.nodes[0]) : [];
+  } else if (uuid.__typename === "TaxonomyTerm") {
+    path = constructPath(uuid);
   }
 
-  if (uuid.__typename === 'CoursePage') {
-    addPathForCoursePage(entry, path);
+  // Special handling for CoursePage titles
+  if (
+    uuid.__typename === "CoursePage" &&
+    uuid.course &&
+    uuid.course.currentRevision
+  ) {
+    const courseTitle = uuid.course.currentRevision.title.trim();
+    path.push(courseTitle);
   }
 
-  if (title) {
-    path = filterAndReversePath(path, title);
-    const isTax = uuid.__typename === 'TaxonomyTerm' && !title.toLowerCase().includes('aufgabe');
-    quickbar.push({
-      id: entry.id,
-      title,
-      path,
-      isTax,
-      count: entry.count,
-      root: path[0] || '',
-    });
+  // Filter path and avoid duplication
+  path = path.filter((p) => p !== title && !title.includes(p));
 
-    const summaryType = isTax ? 'ExerciseFolder' : uuid.__typename;
-    summary[summaryType] = (summary[summaryType] || { count: 0 });
-    summary[summaryType].count += entry.count;
+  if (!title || (uuid.__typename !== "TaxonomyTerm" && path.length === 0)) {
+    return accumulator; // Exclude items without a title or path (except TaxonomyTerm)
   }
-});
 
-fs.writeFileSync('_output/stats_new.txt', `
-Aufrufzahlen in den letzten 3 Wochen (Stand ${new Date().toLocaleString('de-DE')}):
-${JSON.stringify(summary, null, 2)}
-`);
+  // Construct quickbar item
+  const item = {
+    id: uuid.id,
+    title,
+    path,
+    isTax: uuid.__typename === "TaxonomyTerm",
+    count: entry.count,
+    root: path[0] || "",
+  };
 
-fs.writeFileSync('_output/quickbar_v2.json', JSON.stringify(quickbar));
+  accumulator.push(item);
+
+  // Update summary with type-specific count
+  const summaryType = item.isTax ? "ExerciseFolder" : uuid.__typename;
+  summary[summaryType] = summary[summaryType] || { count: 0 };
+  summary[summaryType].count += item.count;
+
+  return accumulator;
+}, []);
+
+// Write the quickbar items and summary to files
+fs.writeFileSync(
+  "_output/quickbar_v2.json",
+  JSON.stringify(quickbarItems, null, 2)
+);
+fs.writeFileSync("_output/summary.json", JSON.stringify(summary, null, 2));
+
+console.log(
+  "Quickbar items and summary have been successfully updated.",
+  quickbarItems.length
+);
