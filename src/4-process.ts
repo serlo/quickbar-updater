@@ -103,4 +103,4 @@ Aufrufzahlen in den letzten 3 Wochen (Stand ${new Date().toLocaleString('de-DE')
 ${JSON.stringify(summary, null, 2)}
 `);
 
-fs.writeFileSync('newoutput/quickbar_v2.json', JSON.stringify(quickbar));
+fs.writeFileSync('_output/quickbar_v2.json', JSON.stringify(quickbar));
