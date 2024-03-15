@@ -57,7 +57,7 @@ export function createQuickBarItems() {
     }
 
     const uuid = entry.meta.uuid;
-    console.log(entry.id, uuid.__typename, JSON.stringify(entry));
+    // console.log(entry.id, uuid.__typename, JSON.stringify(entry));
     let path = [];
     let title = uuid.currentRevision
       ? uuid.currentRevision.title.trim()
@@ -150,3 +150,5 @@ export function createQuickBarItems() {
 
   return quickbarItems;
 }
+
+createQuickBarItems();
