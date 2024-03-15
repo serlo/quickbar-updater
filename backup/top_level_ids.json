@@ -1,0 +1,266 @@
+[
+  {
+    "title": "Alle Themen",
+    "id": 5,
+    "rootName": "Mathematik",
+    "rootId": 5
+  },
+  {
+    "title": "Gymnasium",
+    "id": 16042,
+    "rootName": "Mathematik",
+    "rootId": 5
+  },
+  {
+    "title": "Realschule",
+    "id": 16157,
+    "rootName": "Mathematik",
+    "rootId": 5
+  },
+  {
+    "title": "Mittelschule (Hauptschule)",
+    "id": 16259,
+    "rootName": "Mathematik",
+    "rootId": 5
+  },
+  {
+    "title": "FOS & BOS",
+    "id": 201593,
+    "rootName": "Mathematik",
+    "rootId": 5
+  },
+  {
+    "title": "Hochschule",
+    "id": 44323,
+    "rootName": "Mathematik",
+    "rootId": 5
+  },
+  {
+    "title": "Prüfungen",
+    "id": 83249,
+    "rootName": "Mathematik",
+    "rootId": 5
+  },
+  {
+    "title": "Inhalte bearbeiten und hinzufügen",
+    "id": 19880,
+    "rootName": "Mathematik",
+    "rootId": 5
+  },
+  {
+    "title": "Chat für Mathe-AutorInnen",
+    "url": "https://community.serlo.org/channel/mathe",
+    "rootName": "Mathematik",
+    "rootId": 5
+  },
+  {
+    "title": "Alle Themen",
+    "url": "/informatik/47899/informatik",
+    "id": 47899,
+    "rootId": 47899
+  },
+  {
+    "title": "Programmieren lernen",
+    "url": "/75274/programmieren-lernen",
+    "id": 75274,
+    "rootId": 47899
+  },
+  {
+    "title": "Gymnasium",
+    "url": "/informatik/60396/gymnasium",
+    "id": 60396,
+    "rootId": 47899,
+    "rootName": "Informatik"
+  },
+  {
+    "title": "Bei Serlo-Informatik mitarbeiten",
+    "url": "/49982/mitmachen-in-informatik",
+    "id": 49982,
+    "rootId": 47899
+  },
+  {
+    "title": "Themen",
+    "id": 41107,
+    "rootId": 41107,
+    "rootName": "Physik"
+  },
+  {
+    "title": "Lehrplan",
+    "id": 50540,
+    "rootId": 41107
+  },
+  {
+    "title": "Bei Serlo-Physik mitarbeiten",
+    "id": 253504,
+    "rootId": 41107
+  },
+  {
+    "title": "Alle Themen",
+    "id": 181883,
+    "rootId": 181883
+  },
+  {
+    "title": "Bei Serlo-Lerntipps mitarbeiten",
+    "id": 242472,
+    "rootId": 181883
+  },
+  {
+    "title": "Themen",
+    "id": 18230,
+    "rootId": 18230
+  },
+  {
+    "title": "Bei Serlo-Chemie mitarbeiten",
+    "id": 26633,
+    "rootId": 18230
+  },
+  {
+    "title": "Alle Themen",
+    "id": 17744,
+    "rootName": "Angewandte Nachhaltigkeit",
+    "rootId": 17744
+  },
+  {
+    "title": "Bei Serlo-Nachhaltigkeit mitmachen",
+    "id": 25294,
+    "rootName": "Angewandte Nachhaltigkeit",
+    "rootId": 17744
+  },
+  {
+    "title": "Chat für Nachhaltigkeits-AutorInnen",
+    "url": "https://community.serlo.org/channel/nachhaltigkeit",
+    "rootName": "Angewandte Nachhaltigkeit",
+    "rootId": 17744
+  },
+  {
+    "title": "Themen",
+    "id": 23362,
+    "rootId": 23362
+  },
+  {
+    "title": "Bei Serlo-Biologie mitarbeiten",
+    "id": 25017,
+    "rootId": 23362
+  },
+  {
+    "title": "Themen",
+    "id": 25979,
+    "rootId": 25979
+  },
+  {
+    "title": "Alle Themen",
+    "id": 79159,
+    "rootId": 79159
+  },
+  {
+    "title": "Community",
+    "id": 19882,
+    "rootId": 87993
+  },
+  {
+    "title": "Hilfeseiten",
+    "id": 88059,
+    "rootId": 87993
+  },
+  {
+    "title": "Werte und Entscheidungen",
+    "id": 181028,
+    "rootId": 87993
+  },
+  {
+    "title": "Testbereich",
+    "id": 106082,
+    "rootId": 87993
+  },
+  {
+    "title": "Ressourcen für PädagogInnen",
+    "id": 88061,
+    "rootId": 87993
+  },
+  {
+    "title": "Veranstaltungen für AutorInnen",
+    "id": 145470,
+    "rootId": 87993
+  },
+  {
+    "title": "Alle Aktivitäten auf serlo.org",
+    "url": "/event/history",
+    "rootId": 87993
+  },
+  {
+    "title": "Übersicht aller Kommentare",
+    "url": "/discussions",
+    "rootId": 87993
+  },
+  {
+    "title": "Ungeprüfte Bearbeitungen",
+    "url": "/entity/unrevised",
+    "rootId": 87993
+  },
+  {
+    "title": "Community Übersicht",
+    "id": 87993,
+    "rootId": 87993
+  },
+  {
+    "title": "Chancenwerk auf Serlo",
+    "url": "/mathe/268835/chancenwerk",
+    "id": 268835,
+    "rootId": 268835
+  },
+  {
+    "title": "Ungeprüfte Bearbeitungen",
+    "url": "/entity/unrevised#chancenwerk",
+    "rootId": 268835
+  },
+  {
+    "title": "Zum Chancencampus",
+    "url": "https://www.chancencampus.org/authentication/login",
+    "rootId": 268835
+  },
+  {
+    "title": "Serlo Mathematik",
+    "url": "/mathe",
+    "rootId": 268835
+  },
+  {
+    "title": "Über Serlo",
+    "id": 18922
+  },
+  {
+    "title": "Pädagogisches Konzept",
+    "id": 21423
+  },
+  {
+    "title": "So funktioniert die Lernplattform",
+    "id": 81862
+  },
+  {
+    "title": "Team",
+    "id": 21439
+  },
+  {
+    "title": "Jobs",
+    "id": 21563
+  },
+  {
+    "title": "Partner & Förderer",
+    "id": 21456
+  },
+  {
+    "title": "Wirkung",
+    "id": 21406
+  },
+  {
+    "title": "Transparenz",
+    "id": 21468
+  },
+  {
+    "title": "Die Geschichte von Serlo",
+    "id": 21413
+  },
+  {
+    "title": "Kontakt & Standorte",
+    "id": 21657
+  }
+]
