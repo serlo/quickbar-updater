@@ -52,12 +52,7 @@ const findShortestNodeTree = (nodes: any[]) => {
 
 export function createQuickBarItems() {
   const quickbarItems = inputData.reduce((accumulator, entry) => {
-    if (
-      !entry.meta ||
-      !entry.meta.uuid ||
-      entry.meta.uuid.trashed ||
-      entry.meta.uuid.__typename === "Page"
-    ) {
+    if (!entry.meta || !entry.meta.uuid || entry.meta.uuid.trashed) {
       return accumulator; // Skip entries without metadata, uuid, or if trashed
     }
 
