@@ -29,7 +29,7 @@ function constructPath(term) {
     term = term.parent;
   }
 
-  return path; // Exclude "Root"
+  return path;
 }
 
 const findShortestNodeTree = (nodes: any[]) => {
@@ -124,7 +124,9 @@ export function createQuickBarItems() {
       id: entry.id,
       title,
       path: outpath,
-      isTax: uuid.__typename === "TaxonomyTerm",
+      isTax:
+        uuid.__typename === "TaxonomyTerm" &&
+        !title.toLowerCase().includes("aufgabe"),
       count: entry.count,
       root,
     };
