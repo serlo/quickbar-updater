@@ -15,6 +15,7 @@
     "4-process": "ts-node ./src/4-process.ts"
   },
   "devDependencies": {
-    "@types/node": "^18.0.0"
+    "@types/node": "^18.0.0",
+    "ramda": "^0.29.1"
   }
 }

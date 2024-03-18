@@ -1,125 +1,111 @@
-import { request } from 'graphql-request'
-import fs from 'fs'
+import { request } from "graphql-request";
+import fs from "fs";
 
-const quicklinks = require('../quicklinks.json')
+const quicklinks = require("../quicklinks.json");
+let metaData = [];
 
-let metaData = []
+const isFastMode = process.env.FAST;
+// Determines the API endpoint based on the environment mode
+const endpoint = isFastMode
+  ? "https://api.serlo-staging.dev/graphql"
+  : "https://api.serlo.org/graphql";
 
-const fastMode = process.env.FAST // using staging
-
-const endpoint = fastMode
-  ? 'https://api.serlo-staging.dev/graphql'
-  : 'https://api.serlo.org/graphql'
-
-const limit = fastMode ? 100000 : 1800
-
-run()
+// Set the limit based on the fast mode flag
+const limit = isFastMode ? 1800 : 100000;
 
 async function run() {
-  // Step 0 - fetch metadata cache
-  console.log('load from previous build')
-  const res = await fetch(
-    'https://serlo.github.io/quickbar-updater/meta_data.json'
-  )
-  let metaData = await res.json()
+  console.log("Starting update process...");
 
-  // Step 1 add new stuff
-  const ids = new Set()
-  metaData.forEach((entry) => ids.add(entry.id))
-  for (const entry of quicklinks) {
-    if (!ids.has(entry.id)) {
-      metaData.push(entry)
-    }
+  // Fetch metadata cache
+  // TODO? : Use upload artifacts instead?
+  try {
+    const res = await fetch(
+      "https://serlo.github.io/quickbar-updater/meta_data.json"
+    );
+    metaData = await res.json();
+  } catch (e) {
+    console.log("Failed to load previous metadata");
   }
 
-  // Step 2
-  const ids2 = new Set()
-  quicklinks.forEach((entry) => ids2.add(entry.id))
+  // Step 1: Add new items from quicklinks to metaData if they don't already exist
+  const existingIds = new Set(metaData.map((entry) => entry.id));
+  quicklinks.forEach((entry) => {
+    if (!existingIds.has(entry.id)) {
+      metaData.push({ ...entry, time: 0 }); // Initialize time if not present
+    }
+  });
 
-  const timeCap = Date.now() - 24 * 60 * 60 * 1000 // 1 day
+  // Step 2: Determine which entries need fetching based on time and existence in quicklinks
+  const quicklinkIds = new Set(quicklinks.map((entry) => entry.id));
+  const timeCap = Date.now() - 24 * 60 * 60 * 1000; // 24 hours ago
 
   const toFetch = metaData.filter((entry) => {
-    if (entry.time > 0) {
-      if (entry.time > timeCap) {
-        return false
-      }
-    }
+    const isRecentEnough = entry.time && entry.time > timeCap;
+    const isInQuicklinks = quicklinkIds.has(entry.id);
+    const hasValidType =
+      !entry.meta ||
+      ["Page", "CoursePage", "TaxonomyTerm", "Article"].includes(
+        entry.meta?.uuid?.__typename
+      );
 
-    if (ids2.has(entry.id)) {
-      if (entry.meta && entry.meta.uuid) {
-        if (
-          !['Page', 'CoursePage', 'TaxonomyTerm', 'Article'].includes(
-            entry.meta.uuid.__typename
-          )
-        ) {
-          return false
-        }
-      }
-      return true
-    }
-    return false
-  })
+    return isInQuicklinks && !isRecentEnough && hasValidType;
+  });
 
-  console.log('to fetch', toFetch.length)
-  console.log('limit', limit)
+  console.log(`Entries to fetch: ${toFetch.length}, limit: ${limit}`);
 
-  // Step 3
-  toFetch.sort((a, b) => {
-    const timeA = a.time || -2
-    const timeB = b.time || -2
-    return timeA - timeB
-  })
+  // Step 3: Sort entries by time for prioritization
+  toFetch.sort((a, b) => (a.time || -2) - (b.time || -2));
 
-  const todo = toFetch.slice(0, limit)
-
-  // Step 4
-  for (let i = 0; i < todo.length; i++) {
-    const entry = todo[i]
+  const numberOfEntries = Math.min(toFetch.length, limit);
+  // Step 4: Fetch and update metadata for limited number of entries
+  for (let i = 0; i < numberOfEntries; i++) {
+    const entry = toFetch[i];
     try {
-      console.log((i / todo.length) * 100, '%', entry.id)
-      const data = await request(endpoint, buildQuery(entry.id))
-      entry.meta = data
-      entry.time = Date.now()
-      if (!fastMode) {
-        await sleep(50)
+      console.log(`Fetching ${entry.id} (${(i / numberOfEntries) * 100}%)`);
+      const data = await request(endpoint, buildQuery(entry.id));
+      entry.meta = data;
+      entry.time = Date.now();
+      if (!isFastMode) {
+        await sleep(50); // Throttle requests unless in fast mode
       }
-    } catch (e) {
-      console.log(entry.id, e)
-      await sleep(500)
+    } catch (error) {
+      console.error(`Error fetching ${entry.id}:`, error);
+      await sleep(500); // Longer wait on error
     }
-    if ((i + 1) % 250 == 0) {
-      console.log('saving at', i + 1)
-      save()
+
+    // Periodically save progress
+    if ((i + 1) % 250 === 0 || i === toFetch.length - 1) {
+      console.log(`Saving progress at ${i + 1} entries...`);
+      saveMetaData(metaData);
     }
   }
+}
 
-  save()
-
-  function save() {
-    if (!fs.existsSync('_output')) {
-      fs.mkdirSync('_output')
-    }
-    fs.writeFileSync('_output/meta_data.json', JSON.stringify(metaData))
+function saveMetaData(data) {
+  const outputDir = "_output";
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir);
   }
+  fs.writeFileSync(
+    `${outputDir}/meta_data.json`,
+    JSON.stringify(data, null, 2)
+  );
 }
 
 function buildQuery(id) {
   return `
-{
-  uuid (id: ${id}) {
+  {
+    uuid (id: ${id}) {
       __typename
       alias
-
+  
       ... on Page {
         trashed
         currentRevision {
           title
         }
-        navigation {
-          path {nodes {label}}
-        }
       }
-
+  
       ... on CoursePage {
         trashed
         currentRevision {
@@ -131,13 +117,7 @@ function buildQuery(id) {
           }
           taxonomyTerms {
             nodes {
-              navigation {
-                path {
-                  nodes {
-                    label
-                  }
-                }
-              }
+              ...pathToRoot
             }
           }
         }
@@ -150,33 +130,75 @@ function buildQuery(id) {
         }
         taxonomyTerms {
           nodes {
-            navigation {
-              path {
-                nodes {
-                  label
+            ...pathToRoot
+          }
+        }
+      }
+  
+      ... on TaxonomyTerm {
+        name
+        trashed
+  
+        ...pathToRoot
+      }
+    }
+  }
+  
+  fragment pathToRoot on TaxonomyTerm {
+    title
+    alias
+    id
+    parent {
+      title
+      alias
+      id
+      parent {
+        title
+        alias
+        id
+        parent {
+          title
+          alias
+          id
+          parent {
+            title
+            alias
+            id
+            parent {
+              title
+              alias
+              id
+              parent {
+                title
+                alias
+                id
+                parent {
+                  title
+                  alias
+                  id
+                  parent {
+                    title
+                    alias
+                    id
+                    parent {
+                      title
+                      alias
+                      id
+                    }
+                  }
                 }
               }
             }
           }
         }
       }
-
-      ... on TaxonomyTerm {
-        name
-        trashed
-
-        navigation {
-          path {
-            nodes {
-              label
-            }
-          }
-        }
-      }
+    }
   }
-}`
+  `;
 }
 
 function sleep(milliseconds) {
-  return new Promise((resolve) => setTimeout(resolve, milliseconds))
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
+
+run().catch((error) => console.error("Failed to update metadata:", error));

@@ -1,64 +1,55 @@
-import fs from 'fs'
-import readline from 'readline'
+import fs from 'fs';
+import readline from 'readline';
+const resolver = require('../resolver.json');
 
-const resolver = require('../resolver.json')
+const INPUT_FILE_NAME = './v2_current_de_serlo.org_visits.csv'
+const OUTPUT_FILE_NAME = './quicklinks.json'
 
-const counter = {}
+const visitCounts = {};
 
-const visitsRl = readline.createInterface({
-  input: fs.createReadStream('./v2_current_de_serlo.org_visits.csv'),
-  output: process.stdout,
+const visitsFileReader = readline.createInterface({
+  input: fs.createReadStream(INPUT_FILE_NAME),
   terminal: false,
-})
+});
 
-visitsRl.on('line', (line) => {
-  const parts = line.split(',')
-  if (parts.length < 5) {
-    console.log('too short')
-    return // to short
-  }
-  if (parts[0].includes('added_date')) {
-    console.log('headline')
-    return //headline
-  }
+// Function to extract ID from the given path using the original regex
+const extractIdFromPath = (path) => {
+  // Remove protocol and domain
+  const cleanedPath = path.replace(/^https?:\/\/de.serlo.org/, '');
+  // Original regular expression for matching ID patterns in the path
+  const reg = /^(?:(?:\/[^\/]+)?\/([\d]+)\/[^\/]+|\/([\d]+)|\/taxonomy\/term\/get\/([\d]+))$/;
+  const match = reg.exec(cleanedPath);
 
-  const path = parts[1]
-    .replace('http://de.serlo.org', '')
-    .replace('https://de.serlo.org', '')
-
-  let id = -1
-  const m =
-    /^(?:(?:\/[^\/]+)?\/([\d]+)\/[^\/]+|\/([\d]+)|\/taxonomy\/term\/get\/([\d]+))$/.exec(
-      path
-    )
-
-  if (m) {
-    id = parseInt(m[1] || m[2] || m[3])
-  } else {
-    const resolvedId = resolver.path2uuid[path]
-    if (resolvedId > 0) {
-      id = resolvedId
-    }
+  // Parse the ID from regex match groups
+  if (match) {
+    return parseInt(match[1] || match[2] || match[3], 10);
   }
 
-  if (id == -1) {
-    return // ignore
-  }
+  // Attempt to resolve ID using the resolver mapping
+  const resolvedId = resolver.path2uuid[cleanedPath];
+  return resolvedId > 0 ? resolvedId : -1;
+};
 
-  if (!counter[id]) {
-    counter[id] = 0
-  }
-  counter[id]++
-})
+// Process each line from the CSV file
+visitsFileReader.on('line', (line) => {
+  const columns = line.split(',');
 
-visitsRl.on('close', () => {
-  const arr = []
-  for (const id in counter) {
-    if (counter[id] > 0) {
-      arr.push({ id, count: counter[id] })
-    }
-  }
-  arr.sort((a, b) => b.count - a.count)
-  console.log(arr.length)
-  fs.writeFileSync('quicklinks.json', JSON.stringify(arr))
-})
+  // Skip lines that are too short or contain headers
+  if (columns.length < 5 || columns[0].includes('added_date')) return;
+
+  const id = extractIdFromPath(columns[1]);
+  if (id === -1) return; // Skip if no valid ID is extracted
+
+  // Increment visit count for the extracted ID
+  visitCounts[id] = (visitCounts[id] || 0) + 1;
+});
+
+
+// Sort visit counts and save file
+visitsFileReader.on('close', () => {
+  const sortedVisits = Object.entries(visitCounts)
+    .map(([id, count]) => ({ id, count: count as number}))
+    .sort((a, b) => b.count - a.count);
+  fs.writeFileSync(OUTPUT_FILE_NAME, JSON.stringify(sortedVisits));
+  console.log(`Processed ${sortedVisits.length} entries.`);
+});
