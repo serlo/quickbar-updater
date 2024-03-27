@@ -95,11 +95,12 @@ function buildQuery(id) {
     uuid (id: ${id}) {
       __typename
       alias
-  
+
       ... on Page {
         trashed
         currentRevision {
           title
+          date
         }
       }
   
@@ -107,10 +108,12 @@ function buildQuery(id) {
         trashed
         currentRevision {
           title
+          date
         }
         course {
           currentRevision {
             title
+            date
           }
           taxonomyTerms {
             nodes {
@@ -124,6 +127,7 @@ function buildQuery(id) {
         trashed
         currentRevision {
           title
+          date
         }
         taxonomyTerms {
           nodes {
