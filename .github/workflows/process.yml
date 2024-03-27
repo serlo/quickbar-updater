@@ -46,6 +46,8 @@ jobs:
         run: yarn 3-metadata
       - name: PROCESS
         run: yarn 4-process
+      - name: SITEMAP
+        run: yarn 5-sitemap
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
