@@ -12,7 +12,8 @@
     "1-fetch": "ts-node ./src/1-fetch.ts",
     "2-extract": "ts-node ./src/2-extract.ts",
     "3-metadata": "ts-node ./src/3-metadata.ts",
-    "4-process": "ts-node ./src/4-process.ts"
+    "4-process": "ts-node ./src/4-process.ts",
+    "5-sitemap": "ts-node ./src/5-sitemap.ts"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",
