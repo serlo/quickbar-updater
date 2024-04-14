@@ -20,7 +20,7 @@ async function run() {
   // TODO? : Use upload artifacts instead?
   try {
     const res = await fetch(
-      'https://serlo.github.io/quickbar-updater/meta_data.json'
+      'https://serlo.github.io/quickbar-updater/meta_data.json',
     )
     metaData = await res.json()
   } catch (e) {
@@ -45,7 +45,7 @@ async function run() {
     const hasValidType =
       !entry.meta ||
       ['Page', 'CoursePage', 'TaxonomyTerm', 'Article'].includes(
-        entry.meta?.uuid?.__typename
+        entry.meta?.uuid?.__typename,
       )
 
     return isInQuicklinks && !isRecentEnough && hasValidType
@@ -90,7 +90,7 @@ function saveMetaData(data) {
 }
 
 function buildQuery(id) {
-  return `
+  return gql`
   {
     uuid (id: ${id}) {
       __typename
@@ -196,6 +196,14 @@ function buildQuery(id) {
     }
   }
   `
+}
+
+/**
+ * This marker is used by https://github.com/serlo/unused-graphql-properties
+ * to detect graphql statements.
+ */
+function qgl(strings: TemplateStringsArray): string {
+  return strings[0]
 }
 
 function sleep(milliseconds) {
