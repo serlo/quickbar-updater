@@ -202,8 +202,10 @@ function buildQuery(id) {
  * This marker is used by https://github.com/serlo/unused-graphql-properties
  * to detect graphql statements.
  */
-function qgl(strings: TemplateStringsArray): string {
-  return strings[0]
+function gql(strings: TemplateStringsArray, ...expr: string[]): string {
+  return strings.reduce((result, str, i) => {
+    return result + expr[i - 1] + str
+  })
 }
 
 function sleep(milliseconds) {
