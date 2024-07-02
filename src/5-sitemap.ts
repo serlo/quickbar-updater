@@ -17,9 +17,27 @@ export function createSitemapItems() {
 
     let url = alias
 
-    if(entry.meta.uuid.__typename === 'Course' && entry.id.includes('#')){
-      // title should be the course title here, but fetching the courses content only for that is a lot of data
-      url = buildCoursePageUrl(alias, entry.id.split('#')[1], entry.meta.uuid.title)
+    if(entry.meta.uuid.__typename === 'CoursePage'){
+      return accumulator
+    }
+
+    if(entry.meta.uuid.__typename === 'Course'){
+      const coursePageId = entry.id.split('#')[1]
+      const content = parseDocumentString(entry.meta.uuid.currentRevision?.content) as CourseDocument
+
+      const pages = content.state.pages
+      if (!pages || !pages.length) return accumulator
+
+      const pageIndex = Math.max(
+        pages.findIndex(({ id }) => coursePageId && id.startsWith(coursePageId)),
+        0
+      )
+      const page = pages.at(pageIndex)
+      if (!page) return accumulator
+
+      if(pageIndex > 0){
+        url = buildCoursePageUrl(alias, coursePageId, page.title)
+      }
     }
 
     const item = {
@@ -84,4 +102,29 @@ function toSlug(title: string) {
     .replace(/--+/g, '-') // replace multiple hyphens
     .replace(/^-+/, '') // trim starting hyphen
     .replace(/-+$/, '') // trim end hyphen
+}
+
+export function parseDocumentString(input?: string): object | undefined {
+  if (!input || !input.startsWith('{')) return
+
+  try {
+    return JSON.parse(input) as object
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error('error parsing', e)
+    return
+  }
+}
+
+interface CourseDocument {
+  plugin: 'Course'
+  state: {
+      pages: [
+        {
+          id: string,
+          title: string
+          content: unknown
+        }
+      ]
+  }
 }

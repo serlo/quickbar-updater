@@ -63,7 +63,7 @@ async function run() {
     try {
       console.log(`Fetching ${entry.id} (${(i / numberOfEntries) * 100}%)`)
 
-      // remove courseId
+      // remove coursePageId
       const id = entry.id.split('#')[0]
 
       const data = await request(endpoint, buildQuery(id))
@@ -113,6 +113,12 @@ function buildQuery(id) {
       ... on AbstractEntity {
         currentRevision {
           date
+        }
+      }
+
+      ... on Course {
+        currentRevision {
+          content
         }
       }
 
