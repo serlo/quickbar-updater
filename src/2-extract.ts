@@ -26,7 +26,10 @@ const extractIdFromPath = (path) => {
   // Parse the ID from regex match groups
   if (match && match.groups?.id) {
     const id = parseInt(match.groups.id);
-    if (!isNaN(id)) return id;
+    if(id){
+      return match.groups.coursePageId ? `${id}#${match.groups.coursePageId.substring(1)}` : id;
+    }
+    
   }
 
   // Attempt to resolve ID using the resolver mapping

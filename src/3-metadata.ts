@@ -44,7 +44,7 @@ async function run() {
     const isInQuicklinks = quicklinkIds.has(entry.id)
     const hasValidType =
       !entry.meta ||
-      ['Page', 'CoursePage', 'TaxonomyTerm', 'Article'].includes(
+      ['Page', 'TaxonomyTerm', 'Article', 'Course'].includes(
         entry.meta?.uuid?.__typename,
       )
 
@@ -62,7 +62,11 @@ async function run() {
     const entry = toFetch[i]
     try {
       console.log(`Fetching ${entry.id} (${(i / numberOfEntries) * 100}%)`)
-      const data = await request(endpoint, buildQuery(entry.id))
+
+      // remove courseId
+      const id = entry.id.split('#')[0]
+
+      const data = await request(endpoint, buildQuery(id))
       entry.meta = data
       entry.time = Date.now()
       if (!isFastMode) {
@@ -95,53 +99,33 @@ function buildQuery(id) {
     uuid (id: ${id}) {
       __typename
       alias
+      title
+      trashed
 
-      ... on Page {
-        trashed
-        currentRevision {
-          title
-          date
-        }
-      }
-  
-      ... on CoursePage {
-        trashed
-        currentRevision {
-          title
-          date
-        }
-        course {
-          currentRevision {
-            title
-            date
-          }
-          taxonomyTerms {
-            nodes {
-              ...pathToRoot
-            }
-          }
-        }
-      }
-      
-      ... on Article {
-        trashed
-        currentRevision {
-          title
-          date
-        }
+      ... on AbstractTaxonomyTermChild {
         taxonomyTerms {
           nodes {
             ...pathToRoot
           }
         }
       }
-  
+
+      ... on AbstractEntity {
+        currentRevision {
+          date
+        }
+      }
+
+      ... on Page {
+        currentRevision {
+          date
+        }
+      }
+
       ... on TaxonomyTerm {
-        name
-        trashed
-  
         ...pathToRoot
       }
+
     }
   }
   
