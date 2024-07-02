@@ -59,37 +59,22 @@ export function createQuickBarItems() {
     const uuid = entry.meta.uuid
     // console.log(entry.id, uuid.__typename, JSON.stringify(entry));
     let path = []
-    let title = uuid.currentRevision
-      ? uuid.currentRevision.title.trim()
-      : uuid.name
-      ? uuid.name.trim()
-      : ''
+    let title = uuid.title?.trim() ?? ''
+
+    // maybe special title for course pages?
 
     // Path construction based on type
     if (uuid.__typename === 'TaxonomyTerm') {
       path = constructPath(uuid)
-    } else if (['Article', 'CoursePage'].includes(uuid.__typename)) {
-      if (uuid.__typename === 'Article' && !uuid.taxonomyTerms) path = []
-      else if (uuid.__typename === 'CoursePage' && !uuid.course.taxonomyTerms)
-        path = []
+    }
+    
+    if(['Article', 'Course'].includes(uuid.__typename)) {
+      if(!uuid.taxonomyTerms) path = []
       else {
-        const nodes =
-          uuid.__typename === 'CoursePage'
-            ? uuid.course.taxonomyTerms.nodes
-            : uuid.taxonomyTerms.nodes
+        const nodes = uuid.taxonomyTerms.nodes
         const nodeToBuild = findShortestNodeTree(nodes)
         path = constructPath(nodeToBuild)
       }
-    }
-
-    // Special handling for CoursePage titles
-    if (
-      uuid.__typename === 'CoursePage' &&
-      uuid.course &&
-      uuid.course.currentRevision
-    ) {
-      const courseTitle = uuid.course.currentRevision.title.trim()
-      path.push(courseTitle)
     }
 
     const root = path[0] || ''
