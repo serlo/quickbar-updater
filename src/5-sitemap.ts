@@ -25,7 +25,7 @@ export function createSitemapItems() {
       const coursePageId = entry.id.split('#')[1]
       const content = parseDocumentString(entry.meta.uuid.currentRevision?.content) as CourseDocument
 
-      const pages = content.state.pages
+      const pages = content?.state?.pages
       if (!pages || !pages.length) return accumulator
 
       const pageIndex = Math.max(
