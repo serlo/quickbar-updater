@@ -4,17 +4,15 @@ import { Readable } from 'node:stream'
 
 const saEndpoint =
   'https://simpleanalytics.com/api/export/visits?hostname=de.serlo.org'
+  const DAY = 24 * 60 * 60 * 1000;
 
 async function run() {
-  const currentTime = Date.now()
-  const endTime = currentTime - 24 * 60 * 60 * 1000
-  const startTime = currentTime - 21 * 24 * 60 * 60 * 1000
+  const currentTime = Date.now();
+  const endTime = timestampToDate(currentTime - DAY);
+  const startTime = timestampToDate(currentTime - 21 * DAY);
+  const timeRange = `&start=${startTime}&end=${endTime}`;
 
-  const timeRange = `&start=${timestampToDate(startTime)}&end=${timestampToDate(
-    endTime
-  )}`
-
-  console.log('start fetching stats for time range', timeRange)
+  console.log(`Start fetching stats from: ${startTime} to ${endTime}`);
 
   const resPW = await fetch(saEndpoint + timeRange, {
     headers: {

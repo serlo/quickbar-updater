@@ -45,3 +45,11 @@ input: meta_data.json
 output: quickbar.json
 
 the final output, available at https://serlo.github.io/quickbar-updater/quickbar.json
+
+### yarn 4-sitemap
+
+input: meta_data.json
+
+output: sitemap.json
+
+output the sitemap (seo) as well. Available at https://serlo.github.io/quickbar-updater/sitemap.json
