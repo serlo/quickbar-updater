@@ -17,12 +17,19 @@ const extractIdFromPath = (path) => {
   // Remove protocol and domain
   const cleanedPath = path.replace(/^https?:\/\/de.serlo.org/, '');
   // Original regular expression for matching ID patterns in the path
-  const reg = /^(?:(?:\/[^\/]+)?\/([\d]+)\/[^\/]+|\/([\d]+)|\/taxonomy\/term\/get\/([\d]+))$/;
-  const match = reg.exec(cleanedPath);
+  const reg =
+    /^\/(?<subject>[^/]+\/)?(?<id>\d+)(?<coursePageId>\/[0-9a-f]+)?\/(?<title>[^/]*)$/;
+
+  const simpleReg = /^\/(?<id>\d+)$/;
+  const match = reg.exec(cleanedPath) ?? simpleReg.exec(cleanedPath);
 
   // Parse the ID from regex match groups
-  if (match) {
-    return parseInt(match[1] || match[2] || match[3], 10);
+  if (match && match.groups?.id) {
+    const id = parseInt(match.groups.id);
+    const coursePageId = match.groups.coursePageId?.substring(1);
+
+    if (coursePageId) return `${id}#${coursePageId}`;
+    return id;
   }
 
   // Attempt to resolve ID using the resolver mapping
