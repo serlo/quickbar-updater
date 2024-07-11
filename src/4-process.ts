@@ -1,3 +1,4 @@
+import { getIndexAndCoursePage } from  "./utils/course-helper"
 const fs = require('fs')
 
 const inputData = require('../_output/meta_data.json')
@@ -61,7 +62,14 @@ export function createQuickBarItems() {
     let path = []
     let title = uuid.title?.trim() ?? ''
 
-    // maybe special title for course pages?
+    // special title for course pages
+    if (entry.meta.uuid.__typename === "Course") {
+      const result = getIndexAndCoursePage(entry.id,entry.meta.uuid.currentRevision?.content)
+      if (!result) return accumulator
+      const { page } = result
+      const fullTitle = page.title ? `${page.title} – ${title}` : title;
+      title = fullTitle.length < 75 ? fullTitle : page.title ?? uuid.title;
+    }
 
     // Path construction based on type
     if (uuid.__typename === 'TaxonomyTerm') {
