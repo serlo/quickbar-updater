@@ -49,7 +49,7 @@ jobs:
       - name: SITEMAP
         run: yarn 5-sitemap
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: "_output/"
 
