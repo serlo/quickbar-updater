@@ -33,9 +33,9 @@ jobs:
       SA_KEY: ${{ secrets.SA_KEY }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup Pages
-        uses: actions/configure-pages@v3
+        uses: actions/configure-pages@v5
       - name: Install
         run: yarn
       - name: FETCH
