@@ -2,11 +2,11 @@
   "name": "quickbar-updater",
   "packageManager": "yarn@3.6.1",
   "dependencies": {
-    "dotenv": "^16.4.5",
-    "graphql": "^16.8.1",
-    "graphql-request": "^6.1.0",
+    "dotenv": "^16.4.7",
+    "graphql": "^16.10.0",
+    "graphql-request": "^7.1.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.8.3"
   },
   "scripts": {
     "1-fetch": "ts-node ./src/1-fetch.ts",
@@ -16,7 +16,7 @@
     "5-sitemap": "ts-node ./src/5-sitemap.ts"
   },
   "devDependencies": {
-    "@types/node": "^20.12.7",
-    "ramda": "^0.29.1"
+    "@types/node": "^20.17.30",
+    "ramda": "^0.30.1"
   }
 }
