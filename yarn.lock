@@ -75,12 +75,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.17.48":
-  version: 20.17.48
-  resolution: "@types/node@npm:20.17.48"
+"@types/node@npm:^20.17.50":
+  version: 20.17.50
+  resolution: "@types/node@npm:20.17.50"
   dependencies:
     undici-types: ~6.19.2
-  checksum: 4daa43504b32cbc0abc5de3453da9043113c719139223d0a2cbca2f916e40823a1fef594eb5b346dce70dd711b9e28a106e7feffb51b214f8c78a32b0e91b4dc
+  checksum: ec59f1ea051109497793c1e63c6a3a8d71512cc696b8f10ca214b5065bd5801cc80f3562bfe970410fe88e444f8d70ba1667b68b21f19752078ad0a68bb1478b
   languageName: node
   linkType: hard
 
@@ -157,7 +157,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "quickbar-updater@workspace:."
   dependencies:
-    "@types/node": ^20.17.48
+    "@types/node": ^20.17.50
     dotenv: ^16.5.0
     graphql: ^16.11.0
     graphql-request: ^7.1.2
