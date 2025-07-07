@@ -16,7 +16,7 @@
     "5-sitemap": "ts-node ./src/5-sitemap.ts"
   },
   "devDependencies": {
-    "@types/node": "^20.19.2",
+    "@types/node": "^20.19.4",
     "ramda": "^0.30.1"
   }
 }
