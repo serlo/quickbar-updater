@@ -33,7 +33,7 @@ jobs:
       SA_KEY: ${{ secrets.SA_KEY }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Install
