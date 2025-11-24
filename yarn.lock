@@ -128,14 +128,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-request@npm:^7.3.3":
-  version: 7.3.3
-  resolution: "graphql-request@npm:7.3.3"
+"graphql-request@npm:^7.3.4":
+  version: 7.3.4
+  resolution: "graphql-request@npm:7.3.4"
   dependencies:
     "@graphql-typed-document-node/core": ^3.2.0
   peerDependencies:
     graphql: 14 - 16
-  checksum: 23532edd54e8e8cfa2b2ef275d25d44e3965b5eb49108da60ba203e1eb95173f01b4f1e31048fecffb5f3ad7058e4e8ddbb866395f3caf807097d2cdf7c01527
+  checksum: a33126c240852ca89ff923892722e500eccf084ba086cb95e741d3b5c32a1648e2bbfe185b27598d5a92de279d6e7c61382e2ba3b0030591c23452fd910dd0b5
   languageName: node
   linkType: hard
 
@@ -160,7 +160,7 @@ __metadata:
     "@types/node": ^20.19.25
     dotenv: ^17.2.3
     graphql: ^16.12.0
-    graphql-request: ^7.3.3
+    graphql-request: ^7.3.4
     ramda: ^0.32.0
     ts-node: ^10.9.2
     typescript: ^5.9.3
