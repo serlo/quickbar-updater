@@ -75,12 +75,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.19.25":
-  version: 20.19.25
-  resolution: "@types/node@npm:20.19.25"
+"@types/node@npm:^24.10.1":
+  version: 24.10.1
+  resolution: "@types/node@npm:24.10.1"
   dependencies:
-    undici-types: ~6.21.0
-  checksum: f6d854995d173e9d85c7ffd4ca69ee645daac8c0a150fc3ed2f7b21dfc7ece34e44063213c4e9b11de56fe7de807d59c1bb717fca8af8590b40bfb9d9068e629
+    undici-types: ~7.16.0
+  checksum: c2f370ae7a97c04991e0eee6b57e588a2abef0814a5f6e41fda5a9200cf02ae6654fad51c8372ee203ae4134bab80f5bf441c586f7f50e0fda3ba422f35eb3c0
   languageName: node
   linkType: hard
 
@@ -128,14 +128,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-request@npm:^7.3.4":
-  version: 7.3.4
-  resolution: "graphql-request@npm:7.3.4"
+"graphql-request@npm:^7.3.5":
+  version: 7.3.5
+  resolution: "graphql-request@npm:7.3.5"
   dependencies:
     "@graphql-typed-document-node/core": ^3.2.0
   peerDependencies:
     graphql: 14 - 16
-  checksum: a33126c240852ca89ff923892722e500eccf084ba086cb95e741d3b5c32a1648e2bbfe185b27598d5a92de279d6e7c61382e2ba3b0030591c23452fd910dd0b5
+  checksum: 05d6ee3c84f197bc14669d805ec942f4ed8230e091b8c52d2cebdaebbacf19760d830a6d03c5fe2d739b74a72d742eef9fef246718dbab95bccbb5ed8a5919a2
   languageName: node
   linkType: hard
 
@@ -157,10 +157,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "quickbar-updater@workspace:."
   dependencies:
-    "@types/node": ^20.19.25
+    "@types/node": ^24.10.1
     dotenv: ^17.2.3
     graphql: ^16.12.0
-    graphql-request: ^7.3.4
+    graphql-request: ^7.3.5
     ramda: ^0.32.0
     ts-node: ^10.9.2
     typescript: ^5.9.3
@@ -232,10 +232,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici-types@npm:~6.21.0":
-  version: 6.21.0
-  resolution: "undici-types@npm:6.21.0"
-  checksum: 46331c7d6016bf85b3e8f20c159d62f5ae471aba1eb3dc52fff35a0259d58dcc7d592d4cc4f00c5f9243fa738a11cfa48bd20203040d4a9e6bc25e807fab7ab3
+"undici-types@npm:~7.16.0":
+  version: 7.16.0
+  resolution: "undici-types@npm:7.16.0"
+  checksum: 1ef68fc6c5bad200c8b6f17de8e5bc5cfdcadc164ba8d7208cd087cfa8583d922d8316a7fd76c9a658c22b4123d3ff847429185094484fbc65377d695c905857
   languageName: node
   linkType: hard
 
