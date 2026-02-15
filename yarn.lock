@@ -75,12 +75,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^25.0.9":
-  version: 25.0.9
-  resolution: "@types/node@npm:25.0.9"
+"@types/node@npm:^25.2.2":
+  version: 25.2.2
+  resolution: "@types/node@npm:25.2.2"
   dependencies:
     undici-types: ~7.16.0
-  checksum: 0dd245ed1823d32851007da980319af17f9794b0fe4b6b46093cee185e4c3ea033162238d2dc053b4474c1eeb534d47d2679a92907b5e7a27dac0938cb250c7a
+  checksum: 917d0dc0cbc18e615282825d8ec5352da9c0eda9992fce995d12219b3c8de11f19923a52ad4cbb90f808a210ecf8d6f6ca4efa4a974dfd555982cdb8b9ee8d67
   languageName: node
   linkType: hard
 
@@ -121,10 +121,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^17.2.3":
-  version: 17.2.3
-  resolution: "dotenv@npm:17.2.3"
-  checksum: fde23eb88649041ec7a0f6a47bbe59cac3c454fc2007cf2e40b9c984aaf0636347218c56cfbbf067034b0a73f530a2698a19b4058695787eb650ec69fe234624
+"dotenv@npm:^17.2.4":
+  version: 17.2.4
+  resolution: "dotenv@npm:17.2.4"
+  checksum: 177cb42d328ac70be3c1f1434593914fc3e4719d8d074a890906ca610afae1e0488c623e68aa8f532192e8f687bc9e9e144de7b66fb79b6d20437bbd993059a8
   languageName: node
   linkType: hard
 
@@ -157,8 +157,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "quickbar-updater@workspace:."
   dependencies:
-    "@types/node": ^25.0.9
-    dotenv: ^17.2.3
+    "@types/node": ^25.2.2
+    dotenv: ^17.2.4
     graphql: ^16.12.0
     graphql-request: ^7.4.0
     ramda: ^0.32.0
