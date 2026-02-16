@@ -2,7 +2,7 @@
   "name": "quickbar-updater",
   "packageManager": "yarn@3.6.1",
   "dependencies": {
-    "dotenv": "^17.2.4",
+    "dotenv": "^17.3.1",
     "graphql": "^16.12.0",
     "graphql-request": "^7.4.0",
     "ts-node": "^10.9.2",
@@ -16,7 +16,7 @@
     "5-sitemap": "ts-node ./src/5-sitemap.ts"
   },
   "devDependencies": {
-    "@types/node": "^25.2.2",
+    "@types/node": "^25.2.3",
     "ramda": "^0.32.0"
   }
 }
