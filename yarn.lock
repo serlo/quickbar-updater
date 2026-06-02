@@ -75,12 +75,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^25.9.0":
-  version: 25.9.0
-  resolution: "@types/node@npm:25.9.0"
+"@types/node@npm:^25.9.1":
+  version: 25.9.1
+  resolution: "@types/node@npm:25.9.1"
   dependencies:
     undici-types: ">=7.24.0 <7.24.7"
-  checksum: 17b89c23a1bbc6a3175c2d2defa5d75ff5db424a27ecae8ff2b9c11c8f444b7f219cdae6c7c254c9f022e47adce5840185244af5566b7f94a0879bf6027b86bb
+  checksum: 1a18c731409b14d59cea90ada7f2949ebbd0acf8df5cdfc4e0a981e3fd3f1a9cdc547752b139167989e04c888c61aeac64c4519510b7edbe4d5f456b2975f12c
   languageName: node
   linkType: hard
 
@@ -139,10 +139,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:^16.14.0":
-  version: 16.14.0
-  resolution: "graphql@npm:16.14.0"
-  checksum: a69e939974f44fbf4c367436dc4114b34fb9ed6db30bc8bd567af33cfaab50da19e59df641d18877c16fd5bf8b30b66b145521853a8cca793e80b9ccc00d78f6
+"graphql@npm:^16.14.1":
+  version: 16.14.1
+  resolution: "graphql@npm:16.14.1"
+  checksum: f594982a7996ee94608402b8ad3f66ee5f3c795f310a2fc887a23cced0bd74de554459a38649e2a68880ec8d4be8fb5b35048a2f3e9d291120b62fbbefc89185
   languageName: node
   linkType: hard
 
@@ -157,9 +157,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "quickbar-updater@workspace:."
   dependencies:
-    "@types/node": ^25.9.0
+    "@types/node": ^25.9.1
     dotenv: ^17.4.2
-    graphql: ^16.14.0
+    graphql: ^16.14.1
     graphql-request: ^7.4.0
     ramda: ^0.32.0
     ts-node: ^10.9.2
