@@ -139,10 +139,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:^16.14.1":
-  version: 16.14.1
-  resolution: "graphql@npm:16.14.1"
-  checksum: f594982a7996ee94608402b8ad3f66ee5f3c795f310a2fc887a23cced0bd74de554459a38649e2a68880ec8d4be8fb5b35048a2f3e9d291120b62fbbefc89185
+"graphql@npm:^17.0.2":
+  version: 17.0.2
+  resolution: "graphql@npm:17.0.2"
+  checksum: 4520cdb805a7c0211a45cbed28c0f10bbbd412ed97011a00808872a1abb7167b09d400f065a261b9c85c03ec131ba856910d918de844bb48299dc8b1f08b7805
   languageName: node
   linkType: hard
 
@@ -159,7 +159,7 @@ __metadata:
   dependencies:
     "@types/node": ^25.9.1
     dotenv: ^17.4.2
-    graphql: ^16.14.1
+    graphql: ^17.0.2
     graphql-request: ^7.4.0
     ramda: ^0.32.0
     ts-node: ^10.9.2
