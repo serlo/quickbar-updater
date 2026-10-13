@@ -261,10 +261,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^17.4.2":
-  version: 17.4.2
-  resolution: "dotenv@npm:17.4.2"
-  checksum: 217bf2c4696ca40acc13ad063341e9c77cedfdd75e56e4919f4cf2c6333e4f7b38a4b4067e49d006125502a61060cbe85c7eecb0644e4d99ff014693eb7e62c4
+"dotenv@npm:^18.0.7":
+  version: 18.0.7
+  resolution: "dotenv@npm:18.0.7"
+  bin:
+    dotenv: dist/index.cjs
+  checksum: 125b8f28f3bb5761e8bf843af382125a2a6a967cba3b67dda6a00c1efa791ab52de04f969125c92b5dc1e7c31b0fc450499afe9f2a37a49785259db46f594568
   languageName: node
   linkType: hard
 
@@ -298,7 +300,7 @@ __metadata:
   resolution: "quickbar-updater@workspace:."
   dependencies:
     "@types/node": ^26.1.2
-    dotenv: ^17.4.2
+    dotenv: ^18.0.7
     graphql: ^17.0.2
     graphql-request: ^7.4.0
     ramda: ^0.32.0
