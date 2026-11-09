@@ -75,12 +75,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^26.1.2":
-  version: 26.1.2
-  resolution: "@types/node@npm:26.1.2"
+"@types/node@npm:^26.6.6":
+  version: 26.6.6
+  resolution: "@types/node@npm:26.6.6"
   dependencies:
-    undici-types: ~8.3.0
-  checksum: c77629c1e656808481bc9853cf0065d53e31dd9630d8c85b922583ada4d05e57db51c0098fd6c9056e21c8a1709294ad30f65a350028181e95220eb4e76405c8
+    undici-types: ~8.9.0
+  checksum: e937cc3f4181fb2147241e3bacbd81f57c5e20c47eaa2f79b937908f45170ef8e751dfa62f5ebaff75953eca5f9158ed43363d7360ab5034d7985e5f8c4b6d1f
   languageName: node
   linkType: hard
 
@@ -261,12 +261,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^18.0.7":
-  version: 18.0.7
-  resolution: "dotenv@npm:18.0.7"
+"dotenv@npm:^18.0.9":
+  version: 18.0.9
+  resolution: "dotenv@npm:18.0.9"
   bin:
     dotenv: dist/index.cjs
-  checksum: 125b8f28f3bb5761e8bf843af382125a2a6a967cba3b67dda6a00c1efa791ab52de04f969125c92b5dc1e7c31b0fc450499afe9f2a37a49785259db46f594568
+  checksum: ae1e65d057f2dd322ff7ecd2349d45b064269fb327bcb0a8c227e5638c5b04ae999a8f4a3942cb4707eec394e9116d2de89649a9bd2d8178cd7fb6bcab47c7ae
   languageName: node
   linkType: hard
 
@@ -281,10 +281,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:^17.0.2":
-  version: 17.0.2
-  resolution: "graphql@npm:17.0.2"
-  checksum: 4520cdb805a7c0211a45cbed28c0f10bbbd412ed97011a00808872a1abb7167b09d400f065a261b9c85c03ec131ba856910d918de844bb48299dc8b1f08b7805
+"graphql@npm:^17.1.0":
+  version: 17.1.0
+  resolution: "graphql@npm:17.1.0"
+  checksum: 6983fd4e1afd67ef85e79e2a227ef3bf33000431f0bdae08cc4103fdb9f6e2af73024243a5a378997b0379602197d8784aefc97c3e3957c32555a5da6cddb25c
   languageName: node
   linkType: hard
 
@@ -299,9 +299,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "quickbar-updater@workspace:."
   dependencies:
-    "@types/node": ^26.1.2
-    dotenv: ^18.0.7
-    graphql: ^17.0.2
+    "@types/node": ^26.6.6
+    dotenv: ^18.0.9
+    graphql: ^17.1.0
     graphql-request: ^7.4.0
     ramda: ^0.32.0
     ts-node: ^10.9.2
@@ -496,10 +496,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici-types@npm:~8.3.0":
-  version: 8.3.0
-  resolution: "undici-types@npm:8.3.0"
-  checksum: bdc1d54d8b48f3f2a801f7707a2ad53b76711039dd9a276382d4bdbbded79355574309425096127a42313731bde7a76cc299855fc06872797edd0acbfcef5bc0
+"undici-types@npm:~8.9.0":
+  version: 8.9.0
+  resolution: "undici-types@npm:8.9.0"
+  checksum: 78c081bf592406e4bb8bbcbd6baa5c395b5998b9a6a22786e6df4bb5bc90a86aaaaa43a447b455d90589c8b5f36a5827942c20d5c7248efb66675feec1a7bb02
   languageName: node
   linkType: hard
 
